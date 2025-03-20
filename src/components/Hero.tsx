@@ -43,21 +43,21 @@ const Hero: React.FC = () => {
       </div>
       
       <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center h-full">
-        {/* BIG ASS TEXT centered both vertically and horizontally */}
-        <div className="text-center">
-          <h1 
-            className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-primary animate-fade-in" 
-            style={{ animationDelay: '0.2s' }}
-            ref={heroRef}
-          >
-            Hi, Nemo this side :)
-          </h1>
-        </div>
-
-        {/* 3D scene below the text */}
-        <div className="w-full max-w-xl aspect-square mx-auto mt-16">
-          <div className="relative h-full w-full animate-float">
+        {/* 3D scene with text overlay */}
+        <div className="w-full max-w-xl aspect-square mx-auto relative">
+          <div className="h-full w-full animate-float">
             <Scene3D />
+          </div>
+          
+          {/* Text positioned on top of the 3D scene */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <h1 
+              className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-primary animate-fade-in z-20" 
+              style={{ animationDelay: '0.2s' }}
+              ref={heroRef}
+            >
+              Hi, Nemo this side :)
+            </h1>
           </div>
         </div>
         
