@@ -37,23 +37,23 @@ const Scene3D: React.FC = () => {
     
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     
-    // Create data points material
+    // Create data points material with lighter color and lower opacity
     const particlesMaterial = new THREE.PointsMaterial({
       size: 0.03,
-      color: 0xffbb00,
+      color: 0xffdd0f,  // Lighter yellow color
       transparent: true,
-      opacity: 0.8
+      opacity: 0.4       // Reduced opacity for subtlety
     });
     
     // Create the particle system
     const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particlesMesh);
 
-    // Add a subtle light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    // Add a subtle light with reduced intensity
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
     scene.add(ambientLight);
     
-    const pointLight = new THREE.PointLight(0xffbb00, 0.8);
+    const pointLight = new THREE.PointLight(0xffdd0f, 0.5); // Reduced intensity
     pointLight.position.set(2, 3, 4);
     scene.add(pointLight);
 
