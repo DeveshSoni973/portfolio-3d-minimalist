@@ -1,173 +1,99 @@
 
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-export const Scene3D: React.FC = () => {
+const Scene3D: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
+    if (!mountRef.current) return;
+
     // Scene setup
     const scene = new THREE.Scene();
-    
-    // Camera setup
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
     camera.position.z = 5;
-    
-    // Renderer setup
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
     renderer.setClearColor(0x000000, 0);
+    mountRef.current.appendChild(renderer.domElement);
+
+    // Create particle system
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 2000;
+    const posArray = new Float32Array(particlesCount * 3);
     
-    // Add renderer to DOM
-    mountRef.current?.appendChild(renderer.domElement);
+    for (let i = 0; i < particlesCount * 3; i++) {
+      // Create a sphere distribution
+      const angle1 = Math.random() * Math.PI * 2;
+      const angle2 = Math.random() * Math.PI * 2;
+      const radius = 3 * Math.random();
+      
+      posArray[i] = radius * Math.sin(angle1) * Math.cos(angle2);
+      posArray[i + 1] = radius * Math.sin(angle1) * Math.sin(angle2);
+      posArray[i + 2] = radius * Math.cos(angle1);
+      i += 2;
+    }
     
-    // Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.enableZoom = false;
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     
-    // Lighting
+    // Create data points material
+    const particlesMaterial = new THREE.PointsMaterial({
+      size: 0.03,
+      color: 0xffbb00,
+      transparent: true,
+      opacity: 0.8
+    });
+    
+    // Create the particle system
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    // Add a subtle light
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
     
-    const directionalLight = new THREE.DirectionalLight(0xffbb00, 1);
-    directionalLight.position.set(2, 2, 5);
-    scene.add(directionalLight);
-    
-    // Neural network node geometry
-    const nodeGeometry = new THREE.SphereGeometry(0.1, 32, 32);
-    const nodeMaterial = new THREE.MeshStandardMaterial({ 
-      color: 0xffbb00,
-      emissive: 0xffbb00,
-      emissiveIntensity: 0.2,
-    });
-    
-    // Connection geometry
-    const lineMaterial = new THREE.LineBasicMaterial({ 
-      color: 0xffbb00,
-      transparent: true,
-      opacity: 0.5
-    });
-    
-    // Create nodes in a network structure (3 layers)
-    const nodes = [];
-    const nodePositions = [];
-    const lines = [];
-    
-    // Input layer (4 nodes)
-    for (let i = 0; i < 4; i++) {
-      const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
-      node.position.set(-2, i * 0.6 - 0.9, 0);
-      nodePositions.push(node.position);
-      scene.add(node);
-      nodes.push(node);
-    }
-    
-    // Hidden layer (6 nodes)
-    for (let i = 0; i < 6; i++) {
-      const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
-      node.position.set(0, i * 0.5 - 1.25, 0);
-      nodePositions.push(node.position);
-      scene.add(node);
-      nodes.push(node);
-    }
-    
-    // Output layer (2 nodes)
-    for (let i = 0; i < 2; i++) {
-      const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
-      node.position.set(2, i * 0.7 - 0.35, 0);
-      nodePositions.push(node.position);
-      scene.add(node);
-      nodes.push(node);
-    }
-    
-    // Create connections between layers
-    // Input to hidden
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 6; j++) {
-        const geometry = new THREE.BufferGeometry().setFromPoints([
-          nodePositions[i],
-          nodePositions[4 + j],
-        ]);
-        const line = new THREE.Line(geometry, lineMaterial);
-        scene.add(line);
-        lines.push({line, start: i, end: 4 + j});
-      }
-    }
-    
-    // Hidden to output
-    for (let i = 0; i < 6; i++) {
-      for (let j = 0; j < 2; j++) {
-        const geometry = new THREE.BufferGeometry().setFromPoints([
-          nodePositions[4 + i],
-          nodePositions[10 + j],
-        ]);
-        const line = new THREE.Line(geometry, lineMaterial);
-        scene.add(line);
-        lines.push({line, start: 4 + i, end: 10 + j});
-      }
-    }
-    
+    const pointLight = new THREE.PointLight(0xffbb00, 0.8);
+    pointLight.position.set(2, 3, 4);
+    scene.add(pointLight);
+
     // Animation loop
+    let animationFrameId: number;
     const animate = () => {
-      requestAnimationFrame(animate);
-      
-      // Rotate the model slightly
-      scene.rotation.y += 0.002;
-      
-      // Pulse effect for nodes
-      nodes.forEach((node, i) => {
-        node.scale.x = 1 + 0.2 * Math.sin(Date.now() * 0.002 + i * 0.5);
-        node.scale.y = 1 + 0.2 * Math.sin(Date.now() * 0.002 + i * 0.5);
-        node.scale.z = 1 + 0.2 * Math.sin(Date.now() * 0.002 + i * 0.5);
-      });
-      
-      // Update controls
-      controls.update();
+      particlesMesh.rotation.x += 0.001;
+      particlesMesh.rotation.y += 0.001;
       
       renderer.render(scene, camera);
+      animationFrameId = window.requestAnimationFrame(animate);
     };
     
     animate();
     
-    // Handle window resize
+    // Handle resize
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      if (!mountRef.current) return;
+      
+      const width = mountRef.current.clientWidth;
+      const height = mountRef.current.clientHeight;
+      
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
     };
     
     window.addEventListener('resize', handleResize);
     
-    // Cleanup on unmount
+    // Cleanup
     return () => {
+      window.cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
-      mountRef.current?.removeChild(renderer.domElement);
-      
-      // Dispose geometries and materials
-      nodeGeometry.dispose();
-      nodeMaterial.dispose();
-      lineMaterial.dispose();
-      
-      nodes.forEach(node => {
-        scene.remove(node);
-        node.geometry.dispose();
-      });
-      
-      lines.forEach(({ line }) => {
-        scene.remove(line);
-        line.geometry.dispose();
-      });
-      
-      renderer.dispose();
+      if (mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
     };
   }, []);
   
-  return (
-    <div ref={mountRef} className="w-full h-full" />
-  );
+  return <div ref={mountRef} className="w-full h-full rounded-full" />;
 };
 
 export default Scene3D;

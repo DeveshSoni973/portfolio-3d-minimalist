@@ -43,21 +43,28 @@ const Hero: React.FC = () => {
       </div>
       
       <div className="container mx-auto px-6 relative z-10">
+        {/* BIG ASS TEXT as the first thing visitors see */}
+        <div className="text-center mb-12 md:mb-16">
+          <h1 className="text-5xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-primary animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            Hi, Nemo this side :)
+          </h1>
+        </div>
+
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 md:pr-12" ref={heroRef}>
             <div className="space-y-4">
-              <div className="inline-block px-4 py-1.5 rounded-full bg-black/30 backdrop-blur-sm border border-primary/20 text-sm text-white animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <div className="inline-block px-4 py-1.5 rounded-full bg-black/30 backdrop-blur-sm border border-primary/20 text-sm text-white animate-fade-in" style={{ animationDelay: '0.4s' }}>
                 <span className="mr-2">👋</span> Welcome to my data science portfolio
               </div>
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tighter animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tighter animate-fade-in" style={{ animationDelay: '0.6s' }}>
                 Transforming <span className="text-primary italic">data</span> into <span className="text-primary italic">insights</span>
-              </h1>
-              <p className="text-lg md:text-xl text-white/70 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+              </h2>
+              <p className="text-lg md:text-xl text-white/70 animate-fade-in" style={{ animationDelay: '0.8s' }}>
                 Machine Learning Engineer & Data Scientist specializing in turning complex data into actionable knowledge
               </p>
             </div>
             
-            <div className="flex flex-wrap gap-4 animate-fade-in" style={{ animationDelay: '0.8s' }}>
+            <div className="flex flex-wrap gap-4 animate-fade-in" style={{ animationDelay: '1s' }}>
               <a 
                 href="#projects" 
                 className="px-6 py-3 bg-primary hover:bg-primary/90 text-black font-medium rounded-full transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg hover:shadow-primary/20"
