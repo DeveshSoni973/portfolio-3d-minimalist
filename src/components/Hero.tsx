@@ -25,7 +25,7 @@ const Hero: React.FC = () => {
   }, []);
   
   return (
-    <section className="min-h-screen relative flex flex-col justify-center items-center overflow-hidden bg-gradient-to-b from-black to-[#111]">
+    <section className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-b from-black to-[#111]">
       {/* Background elements - data points */}
       <div className="absolute inset-0 overflow-hidden">
         {Array.from({ length: 20 }).map((_, i) => (
@@ -42,9 +42,9 @@ const Hero: React.FC = () => {
         ))}
       </div>
       
-      <div className="container mx-auto px-6 relative z-10 flex flex-col items-center">
-        {/* BIG ASS TEXT as the main focus */}
-        <div className="text-center mb-12 md:mb-24">
+      <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center h-full">
+        {/* BIG ASS TEXT centered both vertically and horizontally */}
+        <div className="text-center">
           <h1 
             className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-primary animate-fade-in" 
             style={{ animationDelay: '0.2s' }}
@@ -54,15 +54,15 @@ const Hero: React.FC = () => {
           </h1>
         </div>
 
-        {/* 3D scene at the bottom */}
-        <div className="w-full max-w-xl aspect-square mx-auto mt-auto">
+        {/* 3D scene below the text */}
+        <div className="w-full max-w-xl aspect-square mx-auto mt-16">
           <div className="relative h-full w-full animate-float">
             <Scene3D />
           </div>
         </div>
         
         {/* Scroll indicator */}
-        <div className="mt-8 mb-12 animate-bounce">
+        <div className="mt-8 animate-bounce">
           <a href="#about" className="text-white/50 hover:text-primary transition-colors">
             <ArrowDown size={24} />
           </a>
