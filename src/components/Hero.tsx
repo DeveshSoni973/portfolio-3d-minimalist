@@ -25,7 +25,7 @@ const Hero: React.FC = () => {
   }, []);
   
   return (
-    <section className="min-h-screen relative flex items-center overflow-hidden bg-gradient-to-b from-black to-[#111]">
+    <section className="min-h-screen relative flex flex-col justify-center items-center overflow-hidden bg-gradient-to-b from-black to-[#111]">
       {/* Background elements - data points */}
       <div className="absolute inset-0 overflow-hidden">
         {Array.from({ length: 20 }).map((_, i) => (
@@ -42,54 +42,27 @@ const Hero: React.FC = () => {
         ))}
       </div>
       
-      <div className="container mx-auto px-6 relative z-10">
-        {/* BIG ASS TEXT as the first thing visitors see */}
-        <div className="text-center mb-12 md:mb-16">
-          <h1 className="text-5xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-primary animate-fade-in" style={{ animationDelay: '0.2s' }}>
+      <div className="container mx-auto px-6 relative z-10 flex flex-col items-center">
+        {/* BIG ASS TEXT as the main focus */}
+        <div className="text-center mb-12 md:mb-24">
+          <h1 
+            className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-primary animate-fade-in" 
+            style={{ animationDelay: '0.2s' }}
+            ref={heroRef}
+          >
             Hi, Nemo this side :)
           </h1>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8 md:pr-12" ref={heroRef}>
-            <div className="space-y-4">
-              <div className="inline-block px-4 py-1.5 rounded-full bg-black/30 backdrop-blur-sm border border-primary/20 text-sm text-white animate-fade-in" style={{ animationDelay: '0.4s' }}>
-                <span className="mr-2">👋</span> Welcome to my data science portfolio
-              </div>
-              <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tighter animate-fade-in" style={{ animationDelay: '0.6s' }}>
-                Transforming <span className="text-primary italic">data</span> into <span className="text-primary italic">insights</span>
-              </h2>
-              <p className="text-lg md:text-xl text-white/70 animate-fade-in" style={{ animationDelay: '0.8s' }}>
-                Machine Learning Engineer & Data Scientist specializing in turning complex data into actionable knowledge
-              </p>
-            </div>
-            
-            <div className="flex flex-wrap gap-4 animate-fade-in" style={{ animationDelay: '1s' }}>
-              <a 
-                href="#projects" 
-                className="px-6 py-3 bg-primary hover:bg-primary/90 text-black font-medium rounded-full transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg hover:shadow-primary/20"
-              >
-                View Projects
-              </a>
-              <a 
-                href="#contact" 
-                className="px-6 py-3 bg-transparent hover:bg-white/5 text-white border border-white/20 rounded-full transition-all duration-300 hover:border-white/40"
-              >
-                Contact Me
-              </a>
-            </div>
-          </div>
-          
-          <div className="relative aspect-square max-w-md mx-auto">
-            <div className="absolute inset-0 rounded-full bg-primary/5 animate-pulse-subtle" style={{ animationDuration: '4s' }}></div>
-            <div className="relative h-full w-full animate-float">
-              <Scene3D />
-            </div>
+        {/* 3D scene at the bottom */}
+        <div className="w-full max-w-xl aspect-square mx-auto mt-auto">
+          <div className="relative h-full w-full animate-float">
+            <Scene3D />
           </div>
         </div>
         
         {/* Scroll indicator */}
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="mt-8 mb-12 animate-bounce">
           <a href="#about" className="text-white/50 hover:text-primary transition-colors">
             <ArrowDown size={24} />
           </a>
